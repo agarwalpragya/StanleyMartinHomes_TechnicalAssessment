@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Product List Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/42b13eda17.js" crossorigin="anonymous"></script>
+    <!-- Link to external CSS file for styling -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Link to external JavaScript file containing data -->
+    <script type="text/javascript" src="data.js"></script>
+</head>
+
+<body id="body">
+    <div class="container mx-auto" id="container">
+        <!-- Title for the search bar -->
+        <p id="search-bar-title"><b>Product List Search</b></p>
+
+        <!-- Form element containing the search bar and submit button -->
+        <form id="search-form" class="form-inline">
+            <!-- Input element for entering the search term -->
+            <input type="text" id="search" class="form-control mb-2 p-3" placeholder="Search" />
+            <!-- Submit button with a search icon -->
+            <button id="search-btn" type="submit" class="btn btn-success mb-2">
+                <i id="search-icon" class="fa-solid fa-magnifying-glass center" style="color: white;"></i>
+            </button>
+        </form>
+        <!-- Paragraph element for displaying error messages -->
+        <p id="error"></p>
+        <!-- Div element for displaying the search results -->
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Get references to the form, input, error, and results elements
+        const searchForm = document.querySelector('#search-form');
+        const searchInput = document.querySelector('#search');
+        const errorElement = document.querySelector('#error');
+        const resultsElement = document.querySelector('#results');
+
+        // Add an event listener to the form to handle form submission
+        searchForm.addEventListener('submit', (event) => {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            // Hide the error message by default
+            errorElement.className = "d-none"
+            // Get the value of the search input
+            const searchTerm = searchInput.value;
+            // If the search term is empty, display an error message and return
+            if (!searchTerm) {
+                resultsElement.innerHTML = "";
+                errorElement.className = "d-block"
+                errorElement.textContent = "Please enter a search term";
+                return;
+            }
+
+            // Filter the data to find items that match the search term
+            const results = data.filter((item) =>
+                Object.values(item).some((value) =>
+                    value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                )
+            );
+
+            // If no results are found, display an error message and return
+            if (results.length === 0) {
+                resultsElement.innerHTML = "";
+                errorElement.className = "d-block"
+                errorElement.textContent = "No results found";
+                return;
+            }
+
+            // Clear any previous error messages
+            errorElement.textContent = "";
+            errorElement.className = "d-none"
+            // Clear any previous search results
+            resultsElement.innerHTML = "";
+
+            // Sort the results in ascending order by productName
+            results.sort((a, b) => (a.productName > b.productName ? 1 : -1)).forEach((item, index) => {
+                // Create a new card element for each result
+                const card = document.createElement("div");
+                card.id = "card";
+
+                // Add margin to the first card only
+                if (index == 0) {
+                    card.className = "card mt-2 mb-2 ml-2 mr-2";
+                }
+                else {
+                    card.className = "card mb-2 ml-2 mr-2";
+                }
+
+                // Create a new card body element
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+
+                // Create a new div element for the productName and append it to the card body
+                const productNameHeading = document.createElement("div");
+                productNameHeading.textContent = item.productName;
+                cardBody.appendChild(productNameHeading);
+
+                // Create a new div element for the productId and append it to the card body
+                const productIdParagraph = document.createElement("div");
+                productIdParagraph.textContent = item.productId;
+                cardBody.appendChild(productIdParagraph);
+
+                // Create a new div element for the projectName and append it to the card body
+                const projectNameParagraph = document.createElement("div");
+                projectNameParagraph.textContent = item.projectName;
+                cardBody.appendChild(projectNameParagraph);
+
+                // Create a new div element for the metroAreaId and append it to the card body
+                const metroAreaIdParagraph = document.createElement("div");
+                metroAreaIdParagraph.textContent = item.metroAreaId;
+                cardBody.appendChild(metroAreaIdParagraph);
+
+                // Create a new div element for the projectGroupId and append it to the card body
+                const projectGroupIdParagraph = document.createElement("div");
+                projectGroupIdParagraph.textContent = item.projectGroupId;
+                cardBody.appendChild(projectGroupIdParagraph);
+
+                // Append the card body to the card
+                card.appendChild(cardBody);
+                // Append the card to the results element
+                resultsElement.appendChild(card);
+            });
+        });
+    </script>
+</body>
+
+</html>

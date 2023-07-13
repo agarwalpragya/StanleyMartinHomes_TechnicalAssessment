@@ -1,0 +1,17 @@
+# Product List Search
+
+This code creates an HTML page with a search bar and a submit button inside a form. When the form is submitted, the code performs a search on the data using the value entered in the search bar and displays the results in cards below the search bar.
+
+## How it works
+
+The code uses JavaScript to add an event listener to the form that listens for the `submit` event. When the form is submitted, the event listener function is called and performs the following steps:
+
+1. Prevents the default form submission behavior.
+2. Hides any previous error messages.
+3. Gets the value of the search input.
+4. If the search term is empty, displays an error message and returns.
+5. Filters the data to find items that match the search term.
+6. If no results are found, displays an error message and returns.
+7. Clears any previous error messages and search results.
+8. Sorts the results in ascending order by `productName`.
+9. For each result, creates a new card element and appends it to the results element.
